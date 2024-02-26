@@ -29,7 +29,9 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
 
         Fc;
         Qc;
-        G;
+        FdX;
+
+        muckUpCrossCorrelations;
 
         %% END ADD FOR TASK 1
     end
@@ -48,21 +50,16 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
             %% ADD FOR TASK 1
             % You may need to add code here to suppor the prediction step.
             this.Fc = [0,1,0,0
-                  -configuration.alpha,-configuration.beta,0,0
-                  0,0,0,1
-                  0,0,-configuration.alpha,-configuration.beta];
+                      -configuration.alpha,-configuration.beta,0,0
+                      0,0,0,1
+                      0,0,-configuration.alpha,-configuration.beta];
 
             this.Qc = [0 0 0 0;
                        0 1 0 0;
                        0 0 0 0;
-                       0 0 0 1] * configuration.sigmaQ^2;
+                       0 0 0 1] * configuration.sigmaQ;
 
-            this.G = [0,0,0,0
-                      0,1,0,0
-                      0,0,0,0
-                      0,0,0,1
-                      ];
-
+            this.muckUpCrossCorrelations = false;
 
             %% END ADD FOR TASK 1
             
@@ -125,8 +122,14 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
 
             [Fd,Qd] = minislam.utils.continuousToDiscrete(this.Fc,this.Qc,deltaToNextTime);
 
-            this.x = Fd * this.x;
-            this.P = Fd*this.P*Fd' + Qd;
+            if (size(this.FdX, 1) ~= length(this.x))
+                this.FdX = eye(length(this.x));
+            end
+            this.FdX(1:4, 1:4) = Fd;
+
+            this.x = this.FdX * this.x;
+            this.P = this.FdX*this.P*this.FdX';
+            this.P(1:4, 1:4) = this.P(1:4, 1:4) + Qd;
 
             %% END ADD TASK 1; UPDATE FOR TASK 2
         end
@@ -139,21 +142,23 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
             % You will need to add code here to update the GPS. If you
             % experiment with adding it back in as task 5, you will need to
             % modify it.
-
             
             R = event.covariance;
 
-            % innovation vector
-            nu = sqrtm(R) * randn(2, 1);
-            H = [1,0,0,0
-                 0,0,1,0
-                ];
+            n = length(this.x);
+            H = zeros(2, n);
+            H(1, 1) = 1;
+            H(2, 3) = 1;
+
             C = this.P * H';
             S = H*C+R;
-            W = C*inv(S);
+            K = C*inv(S);
+
+            this.P = this.P - K*H*this.P;
+            nu = event.data() - H * this.x;
             
-            this.x = this.x + W*nu;
-            this.P = this.P - W*H*this.P;
+            this.x = this.x + K * nu;
+            % this.P = this.P - K * S * K';    
 
             %% END ADD TASK 1; UPDATE FOR TASK 5                       
         end
@@ -171,12 +176,25 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
                 if (isKey(this.landmarkIDStateVectorMap, landmarkId) == false)
 
                     % ADD FOR TASK 2
-                    error('Implement to complete task 2')
+                    % error('Implement to complete task 2')
                     % You will need to add your code here to register the
                     % new landmark ID and initialize the state estimate
                     % (mean and covariance) using the SLAM augmentation
                     % step. The updated mean will be in this.x, the
                     % covariance in this.P
+
+                    n = length(this.x);
+                    landmarkIdx = n + [1;2];
+                    this.landmarkIDStateVectorMap(landmarkId) = landmarkIdx;
+                    M = zeros(n + 2, n);
+                    M(1:n, 1:n) = eye(n);
+                    M(n + 1, 1) = 1;
+                    M(n + 2, 3) = 1;                    
+                    this.x = M * this.x;
+                    this.x(landmarkIdx) = this.x(landmarkIdx) + event.data(:, l);
+                    this.P = M * this.P * M';
+                    this.P(landmarkIdx, landmarkIdx) = this.P(landmarkIdx, landmarkIdx) + event.covariance();
+
                     % END ADD FOR TASK 2
 
                 else
@@ -185,9 +203,29 @@ classdef DotBotSLAMSystem < minislam.slam.SLAMSystem
                     % You will need to add your code here to update a
                     % previously observed landmark with an observation. The
                     % updated state must be in this.x and this.P.
+
+                    landmarkIdx = this.landmarkIDStateVectorMap(landmarkId);
+                    n = length(this.x);
+                    H = zeros(2, n);
+                    H(1, 1) = -1;
+                    H(2, 3) = -1;
+                    H(1, landmarkIdx(1)) = 1;
+                    H(2, landmarkIdx(2)) = 1;
+                    C = this.P * H';
+                    S = H * C + event.covariance();
+                    nu = event.data(:, l) - H * this.x;
+            
+                    K = C / S;
+            
+                    this.x = this.x + K * nu;
+                    this.P = this.P - K*H*this.P;
                     
                     % You might want to modify the code here as well if you
                     % are corrupting the covariance as part of Task 4.
+                    if (this.muckUpCrossCorrelations == true)
+                        this.P(1:4, 5:end) = 0;
+                        this.P(5: end, 1:4) = 0;
+                    end
                 end
             end
         
