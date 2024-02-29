@@ -18,7 +18,7 @@ simulator = drivebot.DriveBotSimulator(configuration, 'q1_b');
 % Create the localization system
 drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 
-drivebotSLAMSystem.setRecommendOptimizationPeriod(100);
+drivebotSLAMSystem.setRecommendOptimizationPeriod(10);
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
