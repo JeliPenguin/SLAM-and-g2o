@@ -276,7 +276,6 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % Create a GPS measurement edge and add it to the graph
             % warning('drivebotslam:handlegpsobservationevent:unimplemented', ...
             %     'Implement the rest of this method for Q1c.');
-            disp(event);
             gpsMeasurementEdge = drivebot.graph.GPSMeasurementEdge(this.configuration.gpsPositionOffset);
             gpsMeasurementEdge.setVertex(1, this.currentVehicleVertex);
             gpsMeasurementEdge.setMeasurement(event.data);
@@ -308,10 +307,15 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
 
                 % Q2b:
                 % Complete the implementation
-                warning('drivebotslamsystem:handlelandmarkobservationevent:unimplemented', ...
-                    'Implement the rest of this method for Q2b.');
-                
-                this.graph.addEdge(landmarkRangeBearingEdge);
+                % warning('drivebotslamsystem:handlelandmarkobservationevent:unimplemented', ...
+                %     'Implement the rest of this method for Q2b.');
+                if newVertexCreated
+                    landmarkRangeBearingEdge = drivebot.graph.LandmarkRangeBearingEdge();
+                    landmarkRangeBearingEdge.setVertex(1,this.vehicleVertices{this.vehicleVertexId});
+                    landmarkRangeBearingEdge.setVertex(2,landmarkVertex)
+                    landmarkRangeBearingEdge.setMeasurement(z)
+                    this.graph.addEdge(landmarkRangeBearingEdge);
+                end
             end
         end
         

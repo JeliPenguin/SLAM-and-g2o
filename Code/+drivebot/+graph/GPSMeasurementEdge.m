@@ -28,7 +28,7 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         M = [c -s;
              s c ;];
 
-        this.errorZ = -(this.z(1:2)-x(1:2)-M*this.xyOffset);
+        this.errorZ = (this.z(1:2)-x(1:2)-M*this.xyOffset);
 
         end
         
@@ -50,7 +50,7 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         dx = deltax*s + deltay*c;
         dy = -deltax*c+ deltay*s;
 
-        this.J{1} = -[-1 0 dx;
+        this.J{1} = [-1 0 dx;
                     0 -1 dy];
 
         end
