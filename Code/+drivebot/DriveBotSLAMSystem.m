@@ -263,6 +263,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             processModelEdge.initialize();
 
             this.graph.addEdge(processModelEdge);
+
             this.graph.addVertex(this.currentVehicleVertex);
 
             % Bump the indices
