@@ -19,8 +19,8 @@ classdef CompassMeasurementEdge < g2o.core.BaseUnaryEdge
         
         function computeError(this)
             x = this.edgeVertices{1}.estimate();
-            this.errorZ = x(3) + this.compassAngularOffset - this.z;
-            % this.errorZ = this.z - x(3) - this.compassAngularOffset;
+            % this.errorZ = x(3) + this.compassAngularOffset - this.z;
+            this.errorZ = this.z - x(3) - this.compassAngularOffset;
         end
         
         function linearizeOplus(this)

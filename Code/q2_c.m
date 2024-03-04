@@ -78,5 +78,3 @@ observationsPerLandmarkVertex = 0;
 % Q2c:
 % Finish implementing the code to capture information about the graph
 % structure.
-warning('q2_c:unimplemented', ...
-        'Implement the rest of the graph query code for Q2c.')

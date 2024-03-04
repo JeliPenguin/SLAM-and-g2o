@@ -64,11 +64,10 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
             
             Mi = [c s 0;
                 -s c 0;
-                0 0 1]/this.dT;
+                0 0 1];
             
             % Compute the error.
-            this.errorZ = Mi * (this.edgeVertices{2}.x ...
-                - priorX) - this.z;
+            this.errorZ = Mi * (this.edgeVertices{2}.x - priorX)/this.dT - this.z;
             
             % Wrap the heading error to -pi to pi
             this.errorZ(3) = g2o.stuff.normalize_theta(this.errorZ(3));
@@ -81,21 +80,23 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
             % Complete implementation
             % warning('vehiclekinematicsedge:linearizeoplus:unimplemented', ...
             %     'Implement the rest of this method for Q1b.');
-            priorX = this.edgeVertices{1}.x;
+            priorX = this.edgeVertices{1}.estimate;
             c = cos(priorX(3));
             s = sin(priorX(3));
-            dx = this.edgeVertices{2}.x - priorX;
+            dx = this.edgeVertices{2}.estimate - priorX;
             Mi = [c s 0;
                 -s c 0;
                 0 0 1]/this.dT;
             this.J{2} = Mi;
-            this.J{1}(1, 1) = - c/this.dT;
-            this.J{1}(1, 2) = - s/this.dT;
-            this.J{1}(1, 3) = (-dx(1) * s + dx(2) * c)/this.dT;
-            this.J{1}(2, 1) = s/this.dT;
-            this.J{1}(2, 2) = - c/this.dT;
-            this.J{1}(2, 3) = (-dx(1) * c - dx(2) * s)/this.dT;
-            this.J{1}(3, 3) = -1/this.dT;
+            this.J{1}(1, 1) = - c;
+            this.J{1}(1, 2) = - s;
+            this.J{1}(1, 3) = (-dx(1) * s + dx(2) * c);
+            this.J{1}(2, 1) = s;
+            this.J{1}(2, 2) = - c;
+            this.J{1}(2, 3) = (-dx(1) * c - dx(2) * s);
+            this.J{1}(3, 3) = -1;
+
+            this.J{1} = this.J{1} / this.dT;
 
         end
     end    

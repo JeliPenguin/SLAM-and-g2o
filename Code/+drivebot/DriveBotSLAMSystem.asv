@@ -250,8 +250,8 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % Q1b:
             % Implement prediction code here
             odometry=this.u;
-            % Q = this.configuration.ROdometry;
-            Q = this.uCov;
+            Q = this.configuration.ROdometry;
+            % Q = this.uCov;
             omegaQ = inv(Q);
             prevVehicleVertex = this.vehicleVertices{this.vehicleVertexId}; 
             
