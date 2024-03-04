@@ -39,19 +39,19 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         % warning('gpsmeasurementedge:lineareizeoplus:unimplemented', ...
         %         'Implement the rest of this method for Q1d.');
 
-        vertex = this.edgeVertices{1};
+        % vertex = this.edgeVertices{1};
+        % 
+        % x = vertex.estimate();
+        % deltax = this.xyOffset(1);
+        % deltay = this.xyOffset(2);
+        % c = cos(x(3));
+        % s = sin(x(3));
+        % 
+        % dx = deltax*s + deltay*c;
+        % dy = -deltax*c+ deltay*s;
 
-        x = vertex.estimate();
-        deltax = this.xyOffset(1);
-        deltay = this.xyOffset(2);
-        c = cos(x(3));
-        s = sin(x(3));
-
-        dx = deltax*s + deltay*c;
-        dy = -deltax*c+ deltay*s;
-
-        this.J{1} = [-1 0 dx;
-                    0 -1 dy];
+        this.J{1} = [-1 0 0;
+                    0 -1 0];
 
         end
     end

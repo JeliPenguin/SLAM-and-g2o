@@ -18,6 +18,7 @@ drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 % Q1(e)i:
 % Use the method "setRecommendOptimizationPeriod" in DriveBotSLAMSystem
 % to control the rate at which the optimizer runs
+drivebotSLAMSystem.setRecommendOptimizationPeriod(10);
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
