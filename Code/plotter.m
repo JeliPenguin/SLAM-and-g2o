@@ -1,6 +1,6 @@
 function plotter(plots,plot_heading,results)
 
-if ismember("OptTime",plots)
+if isempty(plots) || ismember("OptTime",plots)
 % Plot optimisation times
 minislam.graphics.FigureManager.getFigure('Optimization times');
 clf
@@ -12,7 +12,7 @@ saveas(gcf, plot_heading+'_opt_time', 'png');
 hold on
 end
 
-if ismember("Errors",plots)
+if isempty(plots) || ismember("Errors",plots)
 minislam.graphics.FigureManager.getFigure('Errors');
 clf
 plot(results{:}.vehicleStateTime, results{:}.vehicleStateHistory'-results{:}.vehicleTrueStateHistory')
@@ -24,7 +24,7 @@ saveas(gcf, plot_heading+'_error', 'png');
 hold on
 end
 
-if ismember("Covariance",plots)
+if isempty(plots) || ismember("Covariance",plots)
 % Plot covariance
 minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
 clf
@@ -37,7 +37,7 @@ saveas(gcf, plot_heading+'_covariance', 'png');
 hold on
 end
 
-if ismember("Chi2",plots)
+if isempty(plots) || ismember("Chi2",plots)
 % Plot chi2
 minislam.graphics.FigureManager.getFigure('Vehicle Chi Squared');
 clf
