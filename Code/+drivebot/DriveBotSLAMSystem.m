@@ -312,15 +312,15 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
                 % warning('drivebotslamsystem:handlelandmarkobservationevent:unimplemented', ...
                 %     'Implement the rest of this method for Q2b.');
                 % disp(landmarkVertex.estimate())
+                landmarkRangeBearingEdge = drivebot.graph.LandmarkRangeBearingEdge();
+                landmarkRangeBearingEdge.setVertex(1,this.currentVehicleVertex);
+                landmarkRangeBearingEdge.setVertex(2,landmarkVertex);
+                landmarkRangeBearingEdge.setMeasurement(z);
+                landmarkRangeBearingEdge.setInformation(inv(event.covariance));
                 if newVertexCreated
-                    landmarkRangeBearingEdge = drivebot.graph.LandmarkRangeBearingEdge();
-                    landmarkRangeBearingEdge.setVertex(1,this.currentVehicleVertex);
-                    landmarkRangeBearingEdge.setVertex(2,landmarkVertex);
-                    landmarkRangeBearingEdge.setMeasurement(z);
                     landmarkRangeBearingEdge.initialize()
-                    landmarkRangeBearingEdge.setInformation(inv(event.covariance));
-                    this.graph.addEdge(landmarkRangeBearingEdge);
                 end
+                this.graph.addEdge(landmarkRangeBearingEdge);
             end
         end
         

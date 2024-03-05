@@ -23,8 +23,11 @@ drivebotSLAMSystem.setRecommendOptimizationPeriod(inf);
 % Q2d:
 % Explore the  timestep where the loop closure occurs, and get
 % results just before and after the loop closure event
-warning('q2_d:unimplemented', ...
-        'Analyse loop closure behaviour for Q2d.')
+% warning('q2_d:unimplemented', ...
+%         'Analyse loop closure behaviour for Q2d.')
+
+beforeTimestep = 1200;
+% configuration.maximumStepNumber = beforeTimestep ;
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
@@ -37,32 +40,40 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
 
-% Plot optimisation times.
-minislam.graphics.FigureManager.getFigure('Optimization times');
-clf
-plot(results{1}.optimizationTimes, '*')
-hold on
+if configuration.maximumStepNumber == beforeTimestep
+    title("Just Before Loop Closure");
+    saveas(gcf, 'Figures/q2d_before_loop_closure', 'png');
+else
+    title("After Loop Closure");
+    saveas(gcf, 'Figures/q2d_after_loop_closure', 'png');
+end
 
-% Plot the error curves.
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleStateHistory')
+% % Plot optimisation times.
+% minislam.graphics.FigureManager.getFigure('Optimization times');
+% clf
+% plot(results{1}.optimizationTimes, '*')
+% hold on
 
-% Plot covariance.
-minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
-clf
-plot(results{1}.vehicleCovarianceHistory')
-hold on
-
-% Plot errors.
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleTrueStateHistory')
-hold on
-
-% Plot chi2 values.
-minislam.graphics.FigureManager.getFigure('chi2 values');
-clf
-plot(results{1}.chi2Time, results{1}.chi2History)
-hold on
+% % Plot the error curves.
+% minislam.graphics.FigureManager.getFigure('Errors');
+% clf
+% plot(results{1}.vehicleStateHistory'-results{1}.vehicleStateHistory')
+% 
+% % Plot covariance.
+% minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
+% clf
+% plot(results{1}.vehicleCovarianceHistory')
+% hold on
+% 
+% % Plot errors.
+% minislam.graphics.FigureManager.getFigure('Errors');
+% clf
+% plot(results{1}.vehicleStateHistory'-results{1}.vehicleTrueStateHistory')
+% hold on
+% 
+% % Plot chi2 values.
+% minislam.graphics.FigureManager.getFigure('chi2 values');
+% clf
+% plot(results{1}.chi2Time, results{1}.chi2History)
+% hold on
 
