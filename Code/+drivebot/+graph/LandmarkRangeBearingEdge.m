@@ -17,6 +17,8 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             % Complete implementation
             % warning('landmarkrangebearingedge:initialize:unimplemented', ...
             %     'Implement the rest of this method for Q1b.');
+
+            % Initialize landmark based on the inverse observation model
             x = this.edgeVertices{1}.estimate();
             xk = x(1);
             yk = x(2);
@@ -34,9 +36,9 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             % Q2b:
             % Complete implementation
 
+            % Compute error based on landmark observation model
             x = this.edgeVertices{1}.estimate();
             dx = this.edgeVertices{2}.estimate() - x(1:2);
-            
             
             this.errorZ(1) = norm(dx) - this.z(1);
             this.errorZ(2) = g2o.stuff.normalize_theta(atan2(dx(2), dx(1)) - x(3) - this.z(2));
@@ -49,6 +51,7 @@ classdef LandmarkRangeBearingEdge < g2o.core.BaseBinaryEdge
             % warning('landmarkrangebearingedge:linearizeoplus:unimplemented', ...
             %     'Implement the rest of this method for Q1b.');
 
+            % Compute Jacobian of the error with respect to the state
             x = this.edgeVertices{1}.estimate();
             dx = this.edgeVertices{2}.estimate() - x(1:2);
             r = norm(dx);

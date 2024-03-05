@@ -1,4 +1,4 @@
-% This script runs Q3(a)
+% This script runs Q3(b)
 
 % Create the configuration object.
 configuration = drivebot.SimulatorConfiguration();

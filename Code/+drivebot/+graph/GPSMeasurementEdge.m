@@ -19,6 +19,9 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         % Implement the code
         % warning('gpsmeasurementedge:computeerror:unimplemented', ...
         %         'Implement the rest of this method for Q1d.');
+
+        % Compute error using the given GPS Observation Model
+        
         vertex = this.edgeVertices{1};
 
         x = vertex.estimate();
@@ -39,16 +42,7 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         % warning('gpsmeasurementedge:lineareizeoplus:unimplemented', ...
         %         'Implement the rest of this method for Q1d.');
 
-        % vertex = this.edgeVertices{1};
-        % 
-        % x = vertex.estimate();
-        % deltax = this.xyOffset(1);
-        % deltay = this.xyOffset(2);
-        % c = cos(x(3));
-        % s = sin(x(3));
-        % 
-        % dx = deltax*s + deltay*c;
-        % dy = -deltax*c+ deltay*s;
+        % Compute Jacobian of error with respect to the state
 
         this.J{1} = [-1 0 0;
                     0 -1 0];

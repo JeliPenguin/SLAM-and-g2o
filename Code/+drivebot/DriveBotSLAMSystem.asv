@@ -285,16 +285,10 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % Create a GPS measurement edge and add it to the graph
             % warning('drivebotslam:handlegpsobservationevent:unimplemented', ...
             %     'Implement the rest of this method for Q1c.');
-
-            % Creates a new GPSMeasurement Edge
             gpsMeasurementEdge = drivebot.graph.GPSMeasurementEdge(this.configuration.gpsPositionOffset);
-
-            % Connect the edge to the current vehicle state vertex
             gpsMeasurementEdge.setVertex(1, this.currentVehicleVertex);
             gpsMeasurementEdge.setMeasurement(event.data);
             gpsMeasurementEdge.setInformation(inv(event.covariance));
-            
-            % Add edge to the graph
             this.graph.addEdge(gpsMeasurementEdge);
         end
         
@@ -320,26 +314,20 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
                 [landmarkVertex, newVertexCreated] = this.createOrGetLandmark(event.landmarkIds(l));
                 z = event.data(:, l);
 
+                % disp(event)
                 % Q2b:
                 % Complete the implementation
                 % warning('drivebotslamsystem:handlelandmarkobservationevent:unimplemented', ...
                 %     'Implement the rest of this method for Q2b.');
                 % disp(landmarkVertex.estimate())
-
-                % Construct LandmarkRangeBearing Edge
                 landmarkRangeBearingEdge = drivebot.graph.LandmarkRangeBearingEdge();
-                % Connect the edge with current vehicle vertex edge and
-                % landmark edge
                 landmarkRangeBearingEdge.setVertex(1,this.currentVehicleVertex);
                 landmarkRangeBearingEdge.setVertex(2,landmarkVertex);
                 landmarkRangeBearingEdge.setMeasurement(z);
                 landmarkRangeBearingEdge.setInformation(inv(event.covariance));
                 if newVertexCreated
-                    % Initialize the landmark if it is the first time seeing
-                    % the landmark
                     landmarkRangeBearingEdge.initialize()
                 end
-                % Add edge to the graph
                 this.graph.addEdge(landmarkRangeBearingEdge);
             end
         end
@@ -358,8 +346,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
                 start = 2;
             end
 
-            % Iterate through stored process model edges and remove the
-            % edges, start decided by the type of removal
+            % Iterate through stored process 
             for v = start : this.numProcessModelEdges
                     this.graph.removeEdge(this.processModelEdges{v});
             end

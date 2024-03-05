@@ -32,41 +32,4 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % results. For your report, you need to look at improving these figures
 % including labelling axes, etc.
 
-% Plot optimisation times
-minislam.graphics.FigureManager.getFigure('Optimization times');
-clf
-disp(size(results{:}.optimizationTimes))
-disp(results{:}.optimizationTimes)
-plot(results{:}.vehicleStateTime, results{:}.optimizationTimes', '*')
-xlabel("Optimization Time (s)")
-ylabel("Vehicle State Time (s)")
-title("Optimization times")
-hold on
-
-% % Plot the error curves
-% minislam.graphics.FigureManager.getFigure('Errors');
-% clf
-% plot(results{:}.vehicleStateTime, results{:}.vehicleStateHistory'-results{:}.vehicleTrueStateHistory')
-
-% Plot covariance
-% disp(size(results{1}.vehicleCovarianceHistory))
-minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
-clf
-xlabel("Covariance")
-ylabel("Vehicle State Time (s)")
-legend("X Variance","Y Variance","Phi Variance")
-title("Vehicle Covariances")
-disp(size(results{:}.vehicleCovarianceHistory'))
-plot(results{:}.vehicleStateTime, results{:}.vehicleCovarianceHistory')
-hold on
-
-% Plot chi2
-% disp(size(results{:}.chi2History'))
-minislam.graphics.FigureManager.getFigure('Vehicle Chi Squared');
-clf
-xlabel("Chi Squared")
-ylabel("Vehicle State Time (s)")
-title("Vehicle Chi Squared")
-plot(results{:}.chi2Time, results{:}.chi2History')
-hold on
-
+plotter(["Errors","Covariance"],"Figures/q1b",results)

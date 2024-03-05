@@ -56,7 +56,7 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
             % warning('vehiclekinematicsedge:computeerror:unimplemented', ...
             %         'Implement the rest of this method for Q1b.');
 
-            % Rotation matrix from prior state
+            % Computing the error term using the Process Model Provided
             priorX = this.edgeVertices{1}.x;
 
             c = cos(priorX(3));
@@ -82,13 +82,20 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
             % Complete implementation
             % warning('vehiclekinematicsedge:linearizeoplus:unimplemented', ...
             %     'Implement the rest of this method for Q1b.');
+
+            % Computing Jacobian with respect to vehicle state
+            
             priorX = this.edgeVertices{1}.estimate;
             c = cos(priorX(3));
             s = sin(priorX(3));
             dx = this.edgeVertices{2}.estimate - priorX;
+
             Mi = [c s 0;
                 -s c 0;
                 0 0 1]/this.dT;
+
+            % Since we have xk and xk+1, there would be two Jacobian
+            % matrices
             this.J{2} = Mi;
             this.J{1}(1, 1) = - c;
             this.J{1}(1, 2) = - s;
