@@ -34,32 +34,25 @@ drivebotSLAMSystem.setValidateGraph(false);
 % Run the main loop and correct results
 results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 
-[x, afterP, landmarkAfterIds] = drivebotSLAMSystem.landmarkEstimates();
-
-title("After Loop Closure");
-saveas(gcf, 'Figures/q2d_after_loop_closure', 'png');
-
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
 
-configuration.maximumStepNumber = 1200 ;
-simulator = drivebot.DriveBotSimulator(configuration, 'q2_d');
-drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
-drivebotSLAMSystem.setRecommendOptimizationPeriod(inf);
-drivebotSLAMSystem.setValidateGraph(false);
-
+beforeTimestep = 1200;
+configuration.maximumStepNumber = beforeTimestep ;
 results = minislam.mainLoop(simulator, drivebotSLAMSystem);
+    title("Just Before Loop Closure");
+    saveas(gcf, 'Figures/q2d_before_loop_closure', 'png');
+else
+    title("After Loop Closure");
+    saveas(gcf, 'Figures/q2d_after_loop_closure', 'png');
+end
 
-title("Just Before Loop Closure");
-saveas(gcf, 'Figures/q2d_before_loop_closure', 'png');
 
-[x, beforeP, landmarkIds] = drivebotSLAMSystem.landmarkEstimates();
+[x, P, landmarkIds] = drivebotSLAMSystem.landmarkEstimates();
 
 disp("Landmark Covariance Determinants")
-disp(["Landmark ID","Determinant Before","Determinant After"])
-for i=1:length(beforeP)
-    landmarkCovBefore = beforeP(:,:,i);
-    landmarkCovAfter = afterP(:,:,i);
-    disp([landmarkIds(i),det(landmarkCovBefore),det(landmarkCovAfter)])
+for i=1:length(P)
+    landmarkCov = P(:,:,i);
+    disp(det(landmarkCov))
 end
 
