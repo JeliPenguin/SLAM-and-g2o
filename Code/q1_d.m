@@ -10,7 +10,7 @@ configuration.enableGPS = true;
 % with no noise in them. You might find this useful for debugging.
 % However, unless specified otherwise, any submitted results for any questions or subparts of questions
 % must have this value set to true.
-configuration.perturbWithNoise = true;
+configuration.perturbWithNoise = false;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_d');

@@ -16,6 +16,8 @@ configuration.perturbWithNoise = true;
 % Magic tuning for the no-prediction case
 configuration.laserDetectionRange = 30;
 
+% configuration.maximumStepNumber = 2;
+
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q3_a');
 
@@ -28,7 +30,8 @@ drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 drivebotSLAMSystem.setValidateGraph(false);
 
 % Optimize every 500 timesteps to get a picture of the situation as it evolves
-drivebotSLAMSystem.setRecommendOptimizationPeriod(500);
+% drivebotSLAMSystem.setRecommendOptimizationPeriod(500);
+drivebotSLAMSystem.setRecommendOptimizationPeriod(1);
 
 % Set whether the SLAM system should remove prediction edges. If the first
 % value is true, the SLAM system should remove the edges. If the second is
@@ -42,26 +45,5 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
 
-% Plot optimisation times
-minislam.graphics.FigureManager.getFigure('Optimization times');
-clf
-plot(results{1}.optimizationTimes, '*')
-hold on
-
-% Plot the error curves
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleStateHistory')
-
-% Plot covariance
-minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
-clf
-plot(results{1}.vehicleCovarianceHistory')
-hold on
-
-% Plot errors
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleTrueStateHistory')
-hold on
+% plotter(["OptTime","Chi2","Covariance"],"Figures/q3a_no_opt",results)
 

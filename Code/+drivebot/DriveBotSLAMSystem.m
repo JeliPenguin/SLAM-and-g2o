@@ -46,7 +46,10 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
         % question Q3a
         removePredictionEdgesFromGraph;
         keepFirstPredictionEdge;
-        
+
+        % History for visualizing odometry data
+        odoHistory;
+        odoTime;
     end
     
     methods(Access = public)
@@ -75,6 +78,15 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             
             this.removePredictionEdgesFromGraph = false;
             this.keepFirstPredictionEdge = false;
+
+            this.odoHistory = [];
+            this.odoTime = [];
+        end
+
+        function [odoHistory,odoTime] = getOdoHistory(this)
+            % Get Odometry data history
+            odoHistory = this.odoHistory;
+            odoTime = this.odoTime;
         end
         
         % Destroy the graph when we destroy the SLAM system.
@@ -250,6 +262,8 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % Q1b:
             % Implement prediction code here
             odometry=this.u;
+            this.odoHistory = [this.odoHistory;odometry'];
+            this.odoTime = [this.odoTime,time];
             Q = this.uCov;
             omegaQ = inv(Q);
 
@@ -310,7 +324,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
         end
         
         function handleLandmarkObservationEvent(this, event)
-            
+
             % Iterate over all the landmark measurements
             for l = 1 : length(event.landmarkIds)
                 
@@ -324,7 +338,6 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
                 % Complete the implementation
                 % warning('drivebotslamsystem:handlelandmarkobservationevent:unimplemented', ...
                 %     'Implement the rest of this method for Q2b.');
-                % disp(landmarkVertex.estimate())
 
                 % Construct LandmarkRangeBearing Edge
                 landmarkRangeBearingEdge = drivebot.graph.LandmarkRangeBearingEdge();
@@ -359,10 +372,18 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             end
 
             % Iterate through stored process model edges and remove the
-            % edges, start decided by the type of removal
+            % edges
             for v = start : this.numProcessModelEdges
                     this.graph.removeEdge(this.processModelEdges{v});
             end
+
+            this.numProcessModelEdges = start - 1;
+
+            % % Code Verification that the issue arises when the initial state
+            % % vertex isn't connect to rest of the graph
+            % if this.numProcessModelEdges > 0
+            %     this.graph.removeEdge(this.processModelEdges{1});
+            % end
         end
         
         

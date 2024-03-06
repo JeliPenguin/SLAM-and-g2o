@@ -30,7 +30,6 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
         end
        
         function initialize(this)
-            
                         
             priorX = this.edgeVertices{1}.x;
 
@@ -38,8 +37,8 @@ classdef VehicleKinematicsEdge < g2o.core.BaseBinaryEdge
             s = sin(priorX(3));
             
             M = this.dT * [c -s 0;
-                s c 0;
-                0 0 1];
+                           s c 0;
+                           0 0 1];
             
             % Compute the posterior assming no noise
             this.edgeVertices{2}.x = this.edgeVertices{1}.x + M * this.z;

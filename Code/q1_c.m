@@ -30,7 +30,7 @@ drivebotSLAMSystem.setRecommendOptimizationPeriod(20);
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
 % confident your code is working safely, you can set this to false.
-drivebotSLAMSystem.setValidateGraph(true);
+drivebotSLAMSystem.setValidateGraph(false);
 
 % Run the main loop and correct results
 results = minislam.mainLoop(simulator, drivebotSLAMSystem);
@@ -38,5 +38,6 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
 
-plotter([],"Figures/q1c_compass_fault",results)
+% plotter([],"Figures/q1c_compass_fault",results)
+plotter([],"Figures/q1c_compass_fixed",results)
 

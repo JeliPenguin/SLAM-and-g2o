@@ -179,6 +179,7 @@ classdef GraphicalOutput < handle
                 [x, P] = this.localizationSystems{l}.platformEstimate();
                 set(this.xEst{l}, 'XData', x(1), 'YData', x(2));
                 covPts = this.getCovarianceEllipsePoints([x(1);x(2)], P, 3);
+                % disp(P)
                 set(this.PEst{l}, 'XData', covPts(1, :), 'YData', covPts(2, :));
 
                 % Now update the landmarks

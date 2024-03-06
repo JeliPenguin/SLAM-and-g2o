@@ -7,7 +7,7 @@ configuration = drivebot.SimulatorConfiguration();
 configuration.enableGPS = true;
 
 % Set to true for part ii
-configuration.enableCompass = false;
+configuration.enableCompass = true;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_e');
@@ -18,7 +18,7 @@ drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 % Q1(e)i:
 % Use the method "setRecommendOptimizationPeriod" in DriveBotSLAMSystem
 % to control the rate at which the optimizer runs
-drivebotSLAMSystem.setRecommendOptimizationPeriod(10);
+drivebotSLAMSystem.setRecommendOptimizationPeriod(1);
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
@@ -32,7 +32,7 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % the axes.
 
 if configuration.enableCompass
-    plot_heading = 'Figures/q1e_gps_and_compass';
+    plot_heading = "Figures/q1e_gps_and_compass";
 else
     plot_heading = "Figures/q1e_gps_only";
 end
