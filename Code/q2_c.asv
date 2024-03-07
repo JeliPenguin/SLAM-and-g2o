@@ -48,7 +48,7 @@ observationsPerLandmarkVertex = 0;
 % structure.
 
 
-%Count each instance of Landmark and Vehicle State Vertex
+%Count each instance of Landmark and Vehicle State
 for i = 1:length(allVertices)
     numLandmarks = numLandmarks + isa(allVertices{i},"drivebot.graph.LandmarkStateVertex");
     numVehicleVertices = numVehicleVertices + isa(allVertices{i},"drivebot.graph.VehicleStateVertex");
@@ -63,10 +63,31 @@ for i = 1:length(allEdges)
 end
 
 
+% lmrkobs = [];
+% lmrkobs1 = [];
+% for i = 1:length(allVertices)
+%     if isa(allVertices{i},"drivebot.graph.VehicleStateVertex")
+%         edges = allVertices{i}.edges();
+%         vertex_landmark_count = 0;
+%         for j = 1:length(edges)
+%             if isa(edges{j},"drivebot.graph.LandmarkRangeBearingEdge")
+%                 vertex_landmark_count = vertex_landmark_count + 1;
+%             end
+%         end
+%         lmrkobs = [lmrkobs,vertex_landmark_count];
+%     end
+%     if isa(allVertices{i},"drivebot.graph.LandmarkStateVertex")
+%         edges = allVertices{i}.edges();
+%         vertex_landmark_count = 0;
+%         for j = 1:length(edges)
+%             if isa(edges{j},"drivebot.graph.LandmarkRangeBearingEdge")
+%                 vertex_landmark_count = vertex_landmark_count + 1;
+%             end
+%         end
+%         lmrkobs1 = [lmrkobs1,vertex_landmark_count];
+%     end
+% end
     
-%Divide number of Landmark Range Bearing Edge by number of Vehicle Vertices
-landmarkObservationsPerVehicleVertex = numland/numVehicleVertices;
 
-%Divide number of Landmark Range Bearing Edge by number of Landmark
-%Vertices
+landmarkObservationsPerVehicleVertex = numland/numVehicleVertices;
 observationsPerLandmarkVertex = numland/numLandmarks;
