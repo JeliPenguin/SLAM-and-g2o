@@ -16,27 +16,56 @@ end
 if isempty(plots) || ismember("Errors",plots)
 minislam.graphics.FigureManager.getFigure('Errors');
 clf
-plot(results{:}.vehicleStateTime, results{:}.vehicleStateHistory'-results{:}.vehicleTrueStateHistory')
+error = results{:}.vehicleStateHistory'-results{:}.vehicleTrueStateHistory';
+plot(results{:}.vehicleStateTime, error(:,1:2))
 xlabel("Vehicle State Time (s)")
-ylabel("Error")
-legend("X Error","Y Error","\Phi Error")
-title("State Error")
+ylabel("Error (m)")
+legend("X Error","Y Error")
+title("Vehicle Position Error")
 grid on
-saveas(gcf, plot_heading+'_error', 'png');
-hold on
+saveas(gcf, plot_heading+'_position_error', 'png');
+end
+
+if isempty(plots) || ismember("Errors",plots)
+minislam.graphics.FigureManager.getFigure('Heading Errors');
+clf
+error = results{:}.vehicleStateHistory'-results{:}.vehicleTrueStateHistory';
+plot(results{:}.vehicleStateTime, error(:,3))
+xlabel("Vehicle State Time (s)")
+ylabel("Error (rad)")
+legend("\Phi Error")
+title("Vehicle Heading Error")
+grid on
+saveas(gcf, plot_heading+'_heading_error', 'png');
 end
 
 if isempty(plots) || ismember("Covariance",plots)
 % Plot covariance
 minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
 clf
-plot(results{:}.vehicleStateTime, results{:}.vehicleCovarianceHistory')
-ylabel("Covariance")
+cov = results{:}.vehicleCovarianceHistory';
+plot(results{:}.vehicleStateTime, cov(:,1:2))
+ylabel("Covariance (m^2)")
 xlabel("Vehicle State Time (s)")
-legend("X Variance","Y Variance","\Phi Variance")
-title("State Covariances")
+legend("X Variance","Y Variance")
+title("Vehicle Position Covariances")
 grid on
-saveas(gcf, plot_heading+'_covariance', 'png');
+saveas(gcf, plot_heading+'_position_covariance', 'png');
+hold on
+end
+
+if isempty(plots) || ismember("Covariance",plots)
+% Plot covariance
+minislam.graphics.FigureManager.getFigure('Vehicle Heading Covariances');
+clf
+cov = results{:}.vehicleCovarianceHistory';
+plot(results{:}.vehicleStateTime, cov(:,3))
+ylabel("Covariance (rad^2)")
+xlabel("Vehicle State Time (s)")
+legend("\Phi Covariance")
+title("Vehicle Heading Covariances")
+grid on
+saveas(gcf, plot_heading+'_heading_covariance', 'png');
 hold on
 end
 

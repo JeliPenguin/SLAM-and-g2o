@@ -10,7 +10,7 @@ configuration.enableGPS = true;
 % with no noise in them. You might find this useful for debugging.
 % However, unless specified otherwise, any submitted results for any questions or subparts of questions
 % must have this value set to true.
-configuration.perturbWithNoise = false;
+configuration.perturbWithNoise = true;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_d');
@@ -18,7 +18,7 @@ simulator = drivebot.DriveBotSimulator(configuration, 'q1_d');
 % Create the localization system
 drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 
-% drivebotSLAMSystem.setRecommendOptimizationPeriod(10);
+% drivebotSLAMSystem.setRecommendOptimizationPeriod(1);
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are

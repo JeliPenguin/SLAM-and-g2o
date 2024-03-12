@@ -1,5 +1,5 @@
 % This script runs Q2(d)
-
+rng(0)
 % Create the configuration object.
 configuration = drivebot.SimulatorConfiguration();
 
@@ -56,10 +56,10 @@ saveas(gcf, 'Figures/q2d_before_loop_closure', 'png');
 [x, beforeP, landmarkIds] = drivebotSLAMSystem.landmarkEstimates();
 
 disp("Landmark Covariance Determinants")
-disp(["Landmark ID","Determinant Before","Determinant After"])
+disp(["Landmark ID","Uncertainty Change"])
 for i=1:length(beforeP)
     landmarkCovBefore = beforeP(:,:,i);
     landmarkCovAfter = afterP(:,:,i);
-    disp([landmarkIds(i),det(landmarkCovBefore),det(landmarkCovAfter)])
+    disp([landmarkIds(i),sqrt(det(landmarkCovBefore)),sqrt(det(landmarkCovAfter)),sqrt(det(landmarkCovBefore))-sqrt(det(landmarkCovAfter))])
 end
 

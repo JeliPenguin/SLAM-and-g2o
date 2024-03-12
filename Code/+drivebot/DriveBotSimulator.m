@@ -228,6 +228,7 @@ classdef DriveBotSimulator < minislam.event_generators.EventGenerator
                 
             this.nextGPSTime = this.nextGPSTime + this.configuration.gpsMeasurementPeriod + ...
                 rand * this.configuration.sensorDitherTime;
+            disp(["GPS Time: ",this.nextGPSTime])
             
             % Work out the GPS location in world-fixed coordinates
             M=[cos(this.x(3)) -sin(this.x(3));sin(this.x(3)) cos(this.x(3))];

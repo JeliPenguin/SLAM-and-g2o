@@ -124,6 +124,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             [xS, PS] = this.graph.computeMarginals(this.currentVehicleVertex);
             x=full(xS);
             P=full(PS);
+            disp(P)
         end
         
         % Returns the entire history of the platform estimates. Suppose
@@ -299,6 +300,8 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % Create a GPS measurement edge and add it to the graph
             % warning('drivebotslam:handlegpsobservationevent:unimplemented', ...
             %     'Implement the rest of this method for Q1c.');
+
+            disp(event)
 
             % Creates a new GPSMeasurement Edge
             gpsMeasurementEdge = drivebot.graph.GPSMeasurementEdge(this.configuration.gpsPositionOffset);

@@ -123,7 +123,7 @@ classdef SparseOptimizer < g2o.core.OptimizableGraph
                 PX = inv(this.HX);
             end
 
-            % disp(inv(this.HX))
+            % disp(full(this.HX))
             
             idx = 1;
             for v = 1 : length(vertices)
@@ -138,6 +138,8 @@ classdef SparseOptimizer < g2o.core.OptimizableGraph
                 end
                 idx = idx + d;
             end
+
+            % disp(Px)
         end
         
         % This returns the computed information vector and information
