@@ -124,7 +124,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             [xS, PS] = this.graph.computeMarginals(this.currentVehicleVertex);
             x=full(xS);
             P=full(PS);
-            disp(P)
+            % disp(P)
         end
         
         % Returns the entire history of the platform estimates. Suppose
