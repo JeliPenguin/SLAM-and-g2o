@@ -1,5 +1,8 @@
 % This script runs Q2(d)
+
+% Setting seed for reproducable experiemnt
 rng(0)
+
 % Create the configuration object.
 configuration = drivebot.SimulatorConfiguration();
 
@@ -31,7 +34,7 @@ drivebotSLAMSystem.setRecommendOptimizationPeriod(inf);
 % confident your code is working safely, you can set this to false.
 drivebotSLAMSystem.setValidateGraph(false);
 
-% Run the main loop and correct results
+% Do a full run
 results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 
 [x, afterP, landmarkAfterIds] = drivebotSLAMSystem.landmarkEstimates();
@@ -42,6 +45,7 @@ saveas(gcf, 'Figures/q2d_after_loop_closure', 'png');
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
 
+% Doing a run that stops before loop closure
 configuration.maximumStepNumber = 1200 ;
 simulator = drivebot.DriveBotSimulator(configuration, 'q2_d');
 drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
@@ -57,6 +61,9 @@ saveas(gcf, 'Figures/q2d_before_loop_closure', 'png');
 
 disp("Landmark Covariance Determinants")
 disp(["Landmark ID","Uncertainty Change"])
+
+% Calculates uncertainty before and after loop closure for each landmark,
+% and calculate the change in uncertainty
 for i=1:length(beforeP)
     landmarkCovBefore = beforeP(:,:,i);
     landmarkCovAfter = afterP(:,:,i);

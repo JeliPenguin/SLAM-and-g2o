@@ -21,6 +21,8 @@ classdef CompassMeasurementEdge < g2o.core.BaseUnaryEdge
             x = this.edgeVertices{1}.estimate();
             % this.errorZ = x(3) + this.compassAngularOffset - this.z;
             
+            % Q1c:Normalise angle between [-\pi,\pi], the bug that wasn't fixed
+            % before
             this.errorZ = g2o.stuff.normalize_theta(this.z - x(3) - this.compassAngularOffset);
         end
         

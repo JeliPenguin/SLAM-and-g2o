@@ -301,8 +301,6 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % warning('drivebotslam:handlegpsobservationevent:unimplemented', ...
             %     'Implement the rest of this method for Q1c.');
 
-            disp(event)
-
             % Creates a new GPSMeasurement Edge
             gpsMeasurementEdge = drivebot.graph.GPSMeasurementEdge(this.configuration.gpsPositionOffset);
 

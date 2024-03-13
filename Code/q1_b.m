@@ -10,7 +10,7 @@ configuration = drivebot.SimulatorConfiguration();
 % with no noise in them. You might find this useful for debugging.
 % However, unless specified otherwise, any submitted results must have this
 % value set to true.
-configuration.perturbWithNoise = true;
+configuration.perturbWithNoise = false;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_b');
@@ -18,7 +18,7 @@ simulator = drivebot.DriveBotSimulator(configuration, 'q1_b');
 % Create the localization system
 drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 
-drivebotSLAMSystem.setRecommendOptimizationPeriod(5);
+% drivebotSLAMSystem.setRecommendOptimizationPeriod(5);
 
 % This tells the SLAM system to do a very detailed check that the input
 % appears to be correct but can make the code run slowly. Once you are
@@ -32,4 +32,4 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % results. For your report, you need to look at improving these figures
 % including labelling axes, etc.
 
-plotter(["Errors","Covariance","Chi2"],"Figures/q1b",results)
+plotter(["Errors","Covariance"],"Figures/q1b",results)

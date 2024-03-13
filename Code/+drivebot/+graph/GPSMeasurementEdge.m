@@ -43,6 +43,8 @@ classdef GPSMeasurementEdge < g2o.core.BaseUnaryEdge
         %         'Implement the rest of this method for Q1d.');
 
         % Compute Jacobian of error with respect to the state
+        % Since the error doesn't have component for heading, jacobian for
+        % heading would be 0
 
         this.J{1} = [-1 0 0;
                     0 -1 0];

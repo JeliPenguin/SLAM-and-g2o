@@ -4,6 +4,7 @@
 configuration = drivebot.SimulatorConfiguration();
 
 % Q1c: Set the configuration to enable the compass
+configuration.enableCompass = true;
 
 % Set the compass angular offset. DO NOT change this value.
 configuration.compassAngularOffset=0.75*pi;
@@ -13,9 +14,6 @@ configuration.compassAngularOffset=0.75*pi;
 % However, unless specified otherwise, any submitted results must have this
 % value set to true.
 configuration.perturbWithNoise = true;
-
-% Q1c Modification
-configuration.enableCompass = true;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_c');
