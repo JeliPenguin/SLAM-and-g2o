@@ -7,7 +7,7 @@ configuration = drivebot.SimulatorConfiguration();
 configuration.enableGPS = true;
 
 % Set to true for part ii
-configuration.enableCompass = true;
+configuration.enableCompass = false;
 
 % Set up the simulator
 simulator = drivebot.DriveBotSimulator(configuration, 'q1_e');

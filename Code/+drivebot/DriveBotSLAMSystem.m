@@ -364,7 +364,7 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % warning('drivebotslam:deletevehiclepredictionedges:unimplemented', ...
             %     'Implement the rest of this method for Q3a.');
 
-            if this.removePredictionEdgesFromGraph
+            if ~this.keepFirstPredictionEdge
                 % If removing all, then start at the beginning of the cells
                 start = 1;
             elseif this.keepFirstPredictionEdge
@@ -374,11 +374,15 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
 
             % Iterate through stored process model edges and remove the
             % edges
+
+            disp(["Before:",this.numProcessModelEdges])
             for v = start : this.numProcessModelEdges
                     this.graph.removeEdge(this.processModelEdges{v});
             end
 
             this.numProcessModelEdges = start - 1;
+
+            disp(["After:",this.numProcessModelEdges])
 
             % % Code Verification that the issue arises when the initial state
             % % vertex isn't connect to rest of the graph
