@@ -30,13 +30,13 @@ drivebotSLAMSystem = drivebot.DriveBotSLAMSystem(configuration);
 drivebotSLAMSystem.setValidateGraph(false);
 
 % Optimize every 500 timesteps to get a picture of the situation as it evolves
-% drivebotSLAMSystem.setRecommendOptimizationPeriod(500);
-drivebotSLAMSystem.setRecommendOptimizationPeriod(1);
+drivebotSLAMSystem.setRecommendOptimizationPeriod(500);
+% drivebotSLAMSystem.setRecommendOptimizationPeriod(1);
 
 % Set whether the SLAM system should remove prediction edges. If the first
 % value is true, the SLAM system should remove the edges. If the second is
 % true, the first prediction edge will be retained.
-drivebotSLAMSystem.setRemovePredictionEdges(false, true);
+drivebotSLAMSystem.setRemovePredictionEdges(true, true);
 % drivebotSLAMSystem.setRemovePredictionEdges(true, false);
 
 % Run the main loop and correct results
@@ -46,4 +46,6 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 % the axes.
 
 % plotter(["OptTime","Chi2","Covariance"],"Figures/q3a_no_opt",results)
+
+plotter(["OptTime","Chi2","Covariance"],"Figures/q3a_with_opt",results)
 
