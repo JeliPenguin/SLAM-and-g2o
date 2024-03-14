@@ -50,6 +50,9 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
         % History for visualizing odometry data
         odoHistory;
         odoTime;
+
+        %Q3b Flag to show whether graph pruning should be enabled
+        prune;
     end
     
     methods(Access = public)
@@ -78,6 +81,9 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             
             this.removePredictionEdgesFromGraph = false;
             this.keepFirstPredictionEdge = false;
+            
+            %Q3b: Pruning turned off by default
+            this.prune = false;
 
             this.odoHistory = [];
             this.odoTime = [];
@@ -196,6 +202,8 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             if (this.removePredictionEdgesFromGraph == true)
                 this.deleteVehiclePredictionEdges();
             end
+
+            
             
             % Now call the actual optimizer. Let it handle the default if
             % no steps are specified.
@@ -205,6 +213,12 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             else
                 chi2 = optimize@minislam.slam.SLAMSystem(this);
             end
+            
+            %Q3b: Prune graph if pruning is enabled.
+            if (this.prune == true)
+                this.pruneGraph();
+            end
+            
         end
         
         function setRemovePredictionEdges(this, removeEdges, keepFirst)
@@ -212,8 +226,15 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             this.keepFirstPredictionEdge = keepFirst;
             
         end
+        
+        %Q3b: Set pruning on or off
+        function setPruneOn(this,pruneOn)
+            this.prune = pruneOn;
+        end
     end
     
+
+
     % These are the methods you will need to overload
     methods(Access = protected)
         
@@ -391,6 +412,92 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
             % end
         end
         
+        function pruneGraph(this)
+            %Q3b
+            %Iterating through graph to prune edges and vertices with high
+            %scale-invariant density.
+
+            if this.prune
+                %Extracting all stored edges and vertices of the graph
+                allEdges = this.graph.edges();
+                allVertices = this.graph.vertices();
+                numV = length(allVertices);
+                numE = length(allEdges);
+                              
+                sid = zeros(numV,1);
+
+                for v = 1:numV
+                    vehicleVerticeIdx(v) = isa(allVertices{v},"drivebot.graph.VehicleStateVertex");
+                end
+
+                %Extracting platform estimate history and landmark
+                %estimates to determine positions
+                [T_v, X_v, P_v] = this.platformEstimateHistory();
+                [x_l, P_l, landmarkIds] = this.landmarkEstimates();
+                i = 1;
+                l = 1;
+
+                %To compute state-invariant densities of all vertices, the
+                %platform estimates and landmark estimates are first combined
+                %into a single array in the order that they appear in the
+                %graph
+                for v = 1:numV
+                    if vehicleVerticeIdx(1,v) == true
+                        X(:,v) = X_v(:,i);
+                        %Ensuring not to prune edges associated to turns
+                        if mod(X_v(3,i),pi/4) > pi/10
+                            X(:,v) = [inf;inf;inf];
+                        end
+                        i = i+1;
+                    else
+                        X(:,v) = [x_l(:,l);0];
+                        l = l+1;
+                    end
+                end
+                
+                %Computing state-invariant densities for each vertex,
+                %taking into account only its 20 closest points to reduce
+                %computational cost
+                for v = 2:numV
+                    for i = -10:10
+                        if mod(v-i+numV,numV) ~= 0
+                            if norm(X(:,mod(v-i+numV,numV))-X(:,v)) ~= 0
+                                sid(v) = sid(v) + 1/norm(X(:,mod(v-i+numV,numV))-X(:,v));
+                            end
+                        end
+                    end
+                    sid(v) = sid(v)/pi;
+                end
+
+                %Pruning edges associated with vertices with the highest
+                %state-invariant densities, until 20% of edges have been
+                %pruned.
+                while length(this.graph.edges()) > 0.8*numE
+                    [~,pruneV] = max(sid);
+                    sid(pruneV) = -inf;
+                    if isa(allVertices{pruneV},"drivebot.graph.VehicleStateVertex")
+                        edge = allVertices{pruneV}.edges();
+                        done = 0;
+                        for e = 1:length(edge)
+                            % this.graph.removeEdge(edge{e});
+                            if done == 0
+                                if isa(edge{e},"drivebot.graph.LandmarkRangeBearingEdge")
+                                    this.graph.removeEdge(edge{e});
+                                    done = 1;
+                                end
+                            end
+                            
+                        end
+
+                    end
+
+                end
+            %Initialising optimisation after pruning is complete    
+            this.graph.initializeOptimization(this.validateGraphOnInitialization);
+            end
+
+        
+        end
         
         % This method returns a landmark associated with landmarkId. If a
         % landmark exists already, it is returned. If it does not exist, a
