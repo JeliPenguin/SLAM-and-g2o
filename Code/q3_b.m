@@ -30,14 +30,15 @@ drivebotSLAMSystem.setValidateGraph(false);
 % Optimize every 500 timesteps to get a picture of the situation as it evolves
 drivebotSLAMSystem.setRecommendOptimizationPeriod(500);
 
-% Set whether the SLAM system should remove prediction edges. If the first
-% value is true, the SLAM system should remove the edges. If the second is
-% true, the first prediction edge will be retained.
-drivebotSLAMSystem.setRemovePredictionEdges(false, true);
-% drivebotSLAMSystem.setRemovePredictionEdges(true, false);
+% Set whether the SLAM system should perform graph pruning.
+drivebotSLAMSystem.setPruneOn(true);
 
 % Run the main loop and correct results
+
 results = minislam.mainLoop(simulator, drivebotSLAMSystem);
+graph = drivebotSLAMSystem.optimizer();
+
+
 
 % Minimal output plots. For your answers, please provide titles and label
 % the axes.
