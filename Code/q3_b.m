@@ -66,3 +66,4 @@ clf
 plot(results{1}.vehicleStateHistory'-results{1}.vehicleTrueStateHistory')
 hold on
 
+plotter(["OptTime","Chi2","Covariance"],"Figures/q3b",results)

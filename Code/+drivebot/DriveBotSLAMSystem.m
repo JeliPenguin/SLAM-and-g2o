@@ -477,20 +477,12 @@ classdef DriveBotSLAMSystem < minislam.slam.SLAMSystem
                     sid(pruneV) = -inf;
                     if isa(allVertices{pruneV},"drivebot.graph.VehicleStateVertex")
                         edge = allVertices{pruneV}.edges();
-                        done = 0;
                         for e = 1:length(edge)
-                            % this.graph.removeEdge(edge{e});
-                            if done == 0
-                                if isa(edge{e},"drivebot.graph.LandmarkRangeBearingEdge")
-                                    this.graph.removeEdge(edge{e});
-                                    done = 1;
-                                end
+                            if isa(edge{e},"drivebot.graph.LandmarkRangeBearingEdge")
+                                this.graph.removeEdge(edge{e});
                             end
-                            
                         end
-
                     end
-
                 end
             %Initialising optimisation after pruning is complete    
             this.graph.initializeOptimization(this.validateGraphOnInitialization);
