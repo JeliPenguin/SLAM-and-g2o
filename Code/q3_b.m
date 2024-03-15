@@ -39,31 +39,4 @@ results = minislam.mainLoop(simulator, drivebotSLAMSystem);
 graph = drivebotSLAMSystem.optimizer();
 
 
-
-% Minimal output plots. For your answers, please provide titles and label
-% the axes.
-
-% Plot optimisation times
-minislam.graphics.FigureManager.getFigure('Optimization times');
-clf
-plot(results{1}.optimizationTimes, '*')
-hold on
-
-% Plot the error curves
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleStateHistory')
-
-% Plot covariance
-minislam.graphics.FigureManager.getFigure('Vehicle Covariances');
-clf
-plot(results{1}.vehicleCovarianceHistory')
-hold on
-
-% Plot errors
-minislam.graphics.FigureManager.getFigure('Errors');
-clf
-plot(results{1}.vehicleStateHistory'-results{1}.vehicleTrueStateHistory')
-hold on
-
 plotter(["OptTime","Chi2","Covariance"],"Figures/q3b",results)
